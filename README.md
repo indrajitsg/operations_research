@@ -6,3 +6,7 @@ OR and Optimization from Multiple Resources. The programs in this repository can
 2. [NPTEL - Computer Aided Applied Single Objective Optimization](https://github.com/indrajitsg/operations_research/tree/main/nptel_optimization) - Examples and assignments from YouTube course from NPTEL.
 
 3. [Modern Optimization Methods in Python - SciPy 2017] - Examples from the SciPy 2017 conference](https://github.com/indrajitsg/operations_research/tree/main/opt_methods_scipy) Examples showcased in SciPy 2017 conference.
+
+4. [Grokking Algorithms](https://livebook.manning.com/book/grokking-algorithms-second-edition) Examples from the book Grokking Algorithms
+
+5. [Gurobi Optimization 101](https://www.youtube.com/playlist?list=PLHiHZENG6W8B_65-Unq-G59PtQtEc1Xj4) Notebooks from Gurobi Optimization Training 101
