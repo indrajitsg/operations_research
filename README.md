@@ -9,4 +9,10 @@ OR and Optimization from Multiple Resources. The programs in this repository can
 
 4. [Grokking Algorithms](https://github.com/indrajitsg/operations_research/tree/main/grokking_algorithms) Examples from the book Grokking Algorithms
 
-5. [Gurobi Optimization 101](https://github.com/indrajitsg/operations_research/tree/main/gurobi_opt_101) Notebooks from Gurobi Optimization Training 101
+5. [Gurobi Optimization 101](https://github.com/indrajitsg/operations_research/tree/main/gurobi_opt_101) Notebooks from Gurobi Optimization Training 101.
+
+6. [Pyomo Optimization Modeling with Python](https://github.com/indrajitsg/operations_research/tree/main/pyomo_opt) Scripts from the book "Optimization modeling with Pyomo in Python".
+
+7. [Gurobi Scripts for POM](https://github.com/indrajitsg/operations_research/tree/main/gurobi_pom) Optimization modeling scripts from the book Pyomo Optimization Modeling with Python written in GurobiPy.
+
+8. [Introduction to Linear Optimization and Extensions with MATLAB](https://github.com/indrajitsg/operations_research/tree/main/intro_lin_opt_matlab) MATLAB optimization scripts from the book.
