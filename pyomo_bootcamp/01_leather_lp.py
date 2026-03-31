@@ -39,7 +39,7 @@ def build_model():
 
 def choose_solver(solver_name):
     """Choose solver. Possible candidates:
-        "knitroampl", "baron", "highs", "scip", "ipopt", "gurobi"
+        "gurobi", "cplex_direct", "knitroampl", "baron", "highs", "scip", "ipopt"
     """
     try:
         solver = SolverFactory(solver_name)
