@@ -140,7 +140,7 @@ def main():
     # Solve
     print_banner("STARTING SOLVE")
     print(f"Attempting to solve with solver: {solver_name}")
-    results = solver.solve(model)
+    results = solver.solve(model, tee=True)
 
     # Display solution
     print_banner("RESULTS")
