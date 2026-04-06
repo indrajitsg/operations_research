@@ -110,6 +110,8 @@ def choose_solver(solver_name):
     """
     try:
         solver = SolverFactory(solver_name)
+        if solver_name == "knitroampl":
+            solver.options["par_numthreads"] = 2
         if solver is not None and solver.available(False):
             return solver_name, solver
     except Exception:
