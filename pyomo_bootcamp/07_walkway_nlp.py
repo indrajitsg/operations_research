@@ -30,13 +30,17 @@ def build_model():
     model.width = pyo.Param(initialize=10.0)
     model.length = pyo.Param(initialize=18.0)
     model.handrail = pyo.Param(initialize=250.0)
+    model.lower_bound = pyo.Param(initialize=0)
+    model.upper_bound = pyo.Param(initialize=24.25)
 
     width = model.width
     length = model.length
     handrail = model.handrail
+    lower_bound = model.lower_bound
+    upper_bound = model.upper_bound
 
     # Decision variables
-    model.x = pyo.Var(within=pyo.NonNegativeReals)
+    model.x = pyo.Var(within=pyo.NonNegativeReals, bounds=(lower_bound, upper_bound))
     x = model.x
 
     # Objective function: Maximize the difference of the area of two rectangles
