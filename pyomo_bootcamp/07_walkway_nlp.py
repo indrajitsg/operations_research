@@ -42,7 +42,6 @@ def build_model():
     # Objective function: Maximize the difference of the area of two rectangles
     def objective_rule(model):
         return (length + 2*x) * (width + 2*x) - (length * width)
-        # return 2*(x * length) + 2*(x * width) + 4*x*x
 
     model.Obj = pyo.Objective(rule=objective_rule, sense=pyo.maximize)
 
