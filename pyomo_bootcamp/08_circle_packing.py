@@ -68,7 +68,6 @@ def draw_packing_solution(box_width, box_height, circles):
     plt.show()
 
 
-
 def print_banner(title):
     print("\n" + "=" * 70)
     print(title)
@@ -145,6 +144,10 @@ def choose_solver(solver_name):
     """
     try:
         solver = SolverFactory(solver_name)
+        if solver_name == "ipopt":
+            solver.options["max_iter"] = 5000
+            solver.options["max_wall_time"] = 200
+            solver.options["mu_strategy"] = "adaptive"
         if solver_name == "knitroampl":
             solver.options["par_numthreads"] = 2
             solver.options["ms_enable"] = 1
