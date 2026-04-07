@@ -8,5 +8,6 @@ dependencies = [
     "cplex>=22.1.2.1",
     "gurobipy>=13.0.1",
     "highspy>=1.13.1",
+    "matplotlib>=3.10.8",
     "pyomo>=6.10.0",
 ]
