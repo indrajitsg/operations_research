@@ -192,13 +192,9 @@ def main():
     # Solve
     print_banner("STARTING SOLVE")
     print(f"Attempting to solve with solver: {solver_name}")
-    # results = solver_manager.solve(model, opt=solver_name, load_solutions=True)
     action_handle = solver_manager.queue(model, opt=solver_name)
-    job_id = action_handle.job_number
-    password = action_handle.password
 
-    print(f"Tracking Info -> Job ID: {job_id}, Password: {password}")
-    # Now actually wait for the math to finish
+    # Wait for the job to finish
     results = solver_manager.wait_for(action_handle)
 
     # Display solution
