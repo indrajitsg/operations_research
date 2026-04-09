@@ -12,7 +12,3 @@ OR and Optimization from Multiple Resources. The programs in this repository can
 5. [Gurobi Optimization 101](https://github.com/indrajitsg/operations_research/tree/main/gurobi_opt_101) Notebooks from Gurobi Optimization Training 101.
 
 6. [The Complete Pyomo Bootcamp A-Z (Udemy)](https://github.com/indrajitsg/operations_research/tree/main/pyomo_bootcamp) Pyomo based solutions for problems discussed in the Udemy Course: The Complete Pyomo Bootcamp A-Z.
-
-7. [Gurobi Scripts for POM](https://github.com/indrajitsg/operations_research/tree/main/gurobi_pom) Optimization modeling scripts from the book Pyomo Optimization Modeling with Python written in GurobiPy.
-
-8. [Introduction to Linear Optimization and Extensions with MATLAB](https://github.com/indrajitsg/operations_research/tree/main/intro_lin_opt_matlab) MATLAB optimization scripts from the book.
