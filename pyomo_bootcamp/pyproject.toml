@@ -10,6 +10,7 @@ dependencies = [
     "gurobipy>=13.0.1",
     "highspy>=1.13.1",
     "matplotlib>=3.10.8",
+    "pandas>=3.0.2",
     "pip>=26.0.1",
     "pyomo>=6.10.0",
 ]
