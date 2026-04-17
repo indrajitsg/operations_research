@@ -15,14 +15,14 @@ as:
 5. The maximum free length of the coil spring is to be 14 in †
 6. The maximum outside diameter of the spring is to be 3 in †
 7. The minimum wire diameter of the spring is to be 0.20 in †
-8. The end coefficient is to be 1.0
+8. The end coefficient is to be 1.0 †
 
 Additional data:
 ==================
 Max Sheer Stress (S) = 234.44e3
 Sheer Modulus ASTM a228 (G) = 11.6e6
 d → Wire diameter
-D → Coil diameter
+D → Mean coil diameter
 N → Number of active coils
 Pmax → Max working load
 
@@ -34,7 +34,7 @@ Stress (S) = (8 * K * Pmax * D) / (π * d^3)
 
 Deflection (def) = (8 * D^3 * N) / (G * d^4)
 
-Free Length (L) = Pmax * def + 1.05 * (N + 2) * d
+Free Length (L) = Pmax * def + 1.05 * end_coeff * (N + 2) * d
 """
 import os
 import sys
@@ -114,11 +114,17 @@ def build_model():
     model.spring_idx_lb = pyo.Param(initialize=4)
     spring_idx_lb = model.spring_idx_lb
 
+    model.end_coeff = pyo.Param(initialize=1.0)
+    end_coeff = model.end_coeff
+
     # ==============================
     # Decision variables
     # ==============================
     model.x = pyo.Var(wire_types, within=pyo.Binary)
     x = model.x
+
+    model.d = pyo.Var(within=pyo.NonNegativeReals)
+    d = model.d
 
     model.D = pyo.Var(within=pyo.NonNegativeReals)
     D = model.D
@@ -131,7 +137,7 @@ def build_model():
     # Vol = π * D * d^2 * (N + 2)/4
     # ==============================
     def objective_rule(model):
-        volume = math.pi * D * sum(dw[i] * x[i] for i in wire_types)**2 * (N + 2)/4
+        volume = math.pi * D * d**2 * (N + 2)/4
         return volume
 
     model.Obj = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
@@ -139,11 +145,15 @@ def build_model():
     # ==============================
     # Constraints
     # ==============================
+    def wire_diameter_link_rule(model):
+        return d == sum(dw[i] * x[i] for i in wire_types)
+    
+    model.WireDiameterLinkConstraint = pyo.Constraint(rule=wire_diameter_link_rule)
+
     def max_allowed_stress_rule(model):
-        d_final = sum(dw[i] * x[i] for i in wire_types)
-        C = D / d_final
+        C = D / d
         K = (4*C - 1)/(4*C - 4) + 0.615/C
-        stress = (8 * K * Pmax * D) / (math.pi * d_final**3)
+        stress = (8 * K * Pmax * D) / (math.pi * d**3)
         return stress <= max_stress
     
     model.MaxAllowedStressConstraint = pyo.Constraint(rule=max_allowed_stress_rule)
@@ -154,29 +164,26 @@ def build_model():
     model.SingleWireConstraint = pyo.Constraint(rule=single_wire_type_rule)
     
     def max_load_deflection_rule(model):
-        d_final = sum(dw[i] * x[i] for i in wire_types)
-        compliance = (8 * D**3 * N) / (G * d_final**4)
-        free_length = Pmax * compliance + 1.05 * (N + 2) * d_final
+        compliance = (8 * D**3 * N) / (G * d**4)
+        free_length = Pmax * compliance + 1.05 * end_coeff * (N + 2) * d
         return free_length <= max_free_len
     
     model.MaxFreeLengthConstraint = pyo.Constraint(rule=max_load_deflection_rule)
 
     def preload_deflection_rule(model):
-        d_final = sum(dw[i] * x[i] for i in wire_types)
-        compliance = (8 * D**3 * N) / (G * d_final**4)
+        compliance = (8 * D**3 * N) / (G * d**4)
         deflection = Pload * compliance
         return deflection <= preload_def_len
     
     model.MaxPreloadDeflectionConstraint = pyo.Constraint(rule=preload_deflection_rule)
 
     def min_wire_diameter_rule(model):
-        return sum(dw[i] * x[i] for i in wire_types) >= min_wire_diameter
+        return d >= min_wire_diameter
     
     model.MinWireDiameterConstraint = pyo.Constraint(rule=min_wire_diameter_rule)
 
     def preload_to_max_def_rule(model):
-        d_final = sum(dw[i] * x[i] for i in wire_types)
-        compliance = (8 * D**3 * N) / (G * d_final**4)
+        compliance = (8 * D**3 * N) / (G * d**4)
         deflection_preload = Pload * compliance
         deflection_max = Pmax * compliance
         return deflection_max - deflection_preload == preload_to_max_def_len
@@ -186,14 +193,12 @@ def build_model():
     model.PositiveNumCoilsConstraint = pyo.Constraint(expr = N >= 1)
 
     def max_outside_coil_diameter_rule(model):
-        d_final = sum(dw[i] * x[i] for i in wire_types)
-        return D + d_final <= max_outside_diameter
+        return D + d <= max_outside_diameter
 
     model.MaxOutsideCoilDiameterConstraint = pyo.Constraint(rule=max_outside_coil_diameter_rule)
 
     def spring_idx_lb_rule(model):
-        d_final = sum(dw[i] * x[i] for i in wire_types)
-        return D / d_final >= spring_idx_lb
+        return D >= spring_idx_lb * d
     
     model.SpringIdxLowerBound = pyo.Constraint(rule=spring_idx_lb_rule)
 
@@ -238,7 +243,7 @@ def print_post_solution_audit(model):
         print("No wire type appears to be selected.")
         return
 
-    d = selected_wire
+    d = pyo.value(model.d)
     D = pyo.value(model.D)
     N = pyo.value(model.N)
 
@@ -358,9 +363,7 @@ def main():
     print_banner("RESULTS")
     print(results)
     print(f"Objective: {model.Obj()}")
-    for w in model.wire_types:
-        if model.x[w]() == 1:
-            print(f"Wire diameter: {model.dw[w]}")
+    print(f"Wire diameter: {model.d()}")
     print(f"Coil Diameter: {model.D()}")
     print(f"Number of coils: {model.N()}")
     
