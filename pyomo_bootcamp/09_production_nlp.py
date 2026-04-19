@@ -158,7 +158,8 @@ def build_model():
 
 def choose_solver(solver_name):
     """Choose solver. Possible candidates:
-        "gurobi", "cplex_direct", "knitroampl", "baron", "highs", "scip", "ipopt"
+        "gurobi", "cplex_direct", "knitroampl", "baron", "highs", "scip", "ipopt",
+        "gurobi_direct_minlp"
     """
     try:
         solver = SolverFactory(solver_name)
