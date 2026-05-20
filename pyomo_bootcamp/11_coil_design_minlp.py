@@ -48,8 +48,6 @@ os.environ['NEOS_EMAIL'] = 'indrajitsg@gmail.com'
 
 # Set the pyomo.neos logger to INFO level
 logging.getLogger('pyomo.neos').setLevel(logging.INFO)
-# Standard output handler to ensure it prints to your terminal
-logging.basicConfig(level=logging.INFO)
 
 
 def print_banner(title):
